@@ -9,68 +9,69 @@
 import Foundation
 
 class Menu {
-    
     var shouldQuit = false
     
-    let library = Library()
+    let library = Library() //Create a new instance of the Library class
     
     func go() {
-        help()
+        //Display the menu
+        printMenu()
         
         repeat {
-            
+            //Take user input
             var input = getInput()
             
+            //Check to see whether the input is valid by calling the validateInput function. Carry out the code inside the loop while it's not valid
             while validateInput(input) == false {
                 print("Invalid input")
+                //Display the menu again
+                printMenu()
+                //Get more input
                 input = getInput()
             }
             
+            //Since the input is valid, handle it by calling the handleInput function
             handleInput(input)
             
-        } while !shouldQuit
+        } while !shouldQuit //Run the go function while shouldQuit = false
     }
     
-    func help() {
+    //Function to display our Video Game Library Menu
+    func printMenu() {
         print("""
-    Menu
-    1 Add game
-    2 Remove game
-    3 List games available
-    4 Check out game
-    5 Check in game
-    6 List checked out games
-    7 Help
-    8 Quit
-    
-    """)
+
+            Menu
+            1 Add Game
+            2 Remove Game
+            3 List Available Games
+            4 Check Out Game
+            5 Check In Game
+            6 List Checked Out Games
+            7 Help or type in "help"
+            8 Quit
+            
+            """)
     }
     
     func handleInput(_ input: String) {
         switch input {
-        case "1": 
-            library.addGame()
-            help()
-        case "2":
-            library.removeGame()
-            help()
-        case "3":
-            library.listAvailableGames()
-            help()
-        case "4":
-            library.checkGameOut()
-            help()
-        case "5":
-            library.checkGameIn()
-            help()
+        case "1": // if input == 1
+            library.addGame() //Call the library's addGame function
+        case "2": // if input == 2
+            library.removeGame() //Call the library's removeGame function
+        case "3": // if input == 3
+            library.listAvailableGames() //Call the library's listAvailableGames function
+        case "4": // if input == 4
+            library.checkOut()
+        case "5": // ...
+            library.checkIn()
         case "6":
             library.listUnavailableGames()
-            help()
-        case "7":
-            help()
+        case "7", "help":
+            printMenu()
         case "8":
             quit()
-        default:
+        default: // if input is anything else
             break
         }
     }
@@ -79,30 +80,4 @@ class Menu {
         shouldQuit = true
         print("Thanks for using the video game library")
     }
-    
-    func validateInput(_ input: String) -> Bool {
-        let menuOptions = Array(1...8)
-        
-        guard let number = Int(input) else {return false}
-        
-        return menuOptions.contains(number)
-    }
-    
-    func getInput() -> String {
-        var input: String? = nil
-        repeat {
-            let line = readLine()!.trimmingCharacters(in: .whitespacesAndNewlines)
-            
-            if line != "" {
-                input = line
-            } else {
-                print("Invalid input.")
-            }
-        } while input == nil
-        
-        return input!
-    }
 }
-
-
-
